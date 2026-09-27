@@ -211,3 +211,4 @@ export default function TokenStatus({ isConnected, walletAddress, onTokenStatus 
       </div>
     );
   }
+}
