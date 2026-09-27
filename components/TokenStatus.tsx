@@ -90,13 +90,13 @@ export default function TokenStatus({ isConnected, walletAddress, onTokenStatus 
 
   if (!isConnected) {
     return (
-      <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-6 sm:p-8 hover:border-gray-700 transition-all duration-300 animate-fade-in">
+      <div className="bg-white/5 border border-white/10 rounded-xl p-6 sm:p-8">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center ring-2 ring-gray-700 ring-offset-2 ring-offset-gray-900">
+          <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
             <span className="text-2xl">🔐</span>
           </div>
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-gray-300">Connect Your Wallet</h3>
+            <h3 className="text-base font-semibold text-white">Connect Your Wallet</h3>
             <p className="text-sm text-gray-500">Connect to check your token status</p>
           </div>
         </div>
@@ -107,11 +107,11 @@ export default function TokenStatus({ isConnected, walletAddress, onTokenStatus 
   // Optimistic loading state with address shown
   if (result.isLoading) {
     return (
-      <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-6 sm:p-8 animate-fade-in">
+      <div className="bg-white/5 border border-white/10 rounded-xl p-6 sm:p-8">
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-purple-500/25 animate-pulse">
+              <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-gray-900 font-semibold text-sm">
                 {walletAddress ? formatAddress(walletAddress).slice(0, 2) : '..'}
               </div>
               <div>
@@ -121,13 +121,13 @@ export default function TokenStatus({ isConnected, walletAddress, onTokenStatus 
                 <p className="text-xs text-gray-500">Wallet connected</p>
               </div>
             </div>
-            <div className="px-3 py-1 rounded-full bg-yellow-500/20 border border-yellow-500/30 text-yellow-400 text-sm font-medium animate-pulse">
+            <div className="px-3 py-1 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 text-xs font-medium">
               Checking...
             </div>
           </div>
-          <div className="flex items-center gap-3 pt-2 border-t border-gray-800">
-            <div className="w-5 h-5 border-2 border-purple-400 border-t-transparent rounded-full animate-spin" />
-            <p className="text-sm text-gray-400">Verifying SIP-010 token and SIP-009 NFT ownership...</p>
+          <div className="flex items-center gap-3 pt-3 border-t border-white/10">
+            <div className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+            <p className="text-sm text-gray-400">Verifying token ownership...</p>
           </div>
         </div>
       </div>
@@ -137,35 +137,35 @@ export default function TokenStatus({ isConnected, walletAddress, onTokenStatus 
   // User has access (either token or NFT)
   if (result.hasAccess) {
     return (
-      <div className="bg-gradient-to-br from-green-900/20 to-emerald-900/20 border border-green-500/30 rounded-2xl p-6 sm:p-8 hover:border-green-500/50 transition-all duration-300 animate-fade-in shadow-lg shadow-green-500/10">
+      <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-6 sm:p-8">
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-green-500/25 animate-pulse-glow">
+              <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center">
                 <span className="text-lg">✓</span>
               </div>
               <div>
                 <p className="text-sm font-medium text-white">
                   {walletAddress ? formatAddress(walletAddress) : 'Unknown'}
                 </p>
-                <p className="text-xs text-gray-400">Wallet connected</p>
+                <p className="text-xs text-gray-500">Wallet connected</p>
               </div>
             </div>
-            <div className="px-3 py-1 rounded-full bg-green-500/20 border border-green-500/30 text-green-400 text-sm font-medium">
-              You can post
+            <div className="px-3 py-1 rounded-full bg-green-500/20 border border-green-500/30 text-green-400 text-xs font-medium">
+              Access Granted
             </div>
           </div>
           
           <div className="pt-3 border-t border-green-500/20 space-y-2">
             {result.tokenType === 'SIP010' && result.balance !== undefined ? (
-              <div className="flex items-center justify-between group">
-                <span className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">SIP-010 Token Balance:</span>
-                <span className="text-sm font-semibold text-white group-hover:text-green-400 transition-colors">{result.balance} tokens</span>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-400">Token Balance:</span>
+                <span className="text-sm font-semibold text-white">{result.balance} tokens</span>
               </div>
             ) : result.tokenType === 'SIP009' ? (
-              <div className="flex items-center justify-between group">
-                <span className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">SIP-009 NFT Ownership:</span>
-                <span className="text-sm font-semibold text-white group-hover:text-green-400 transition-colors">Yes</span>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-400">NFT Ownership:</span>
+                <span className="text-sm font-semibold text-white">Yes</span>
               </div>
             ) : null}
           </div>
@@ -176,11 +176,11 @@ export default function TokenStatus({ isConnected, walletAddress, onTokenStatus 
 
   // User does not have access
   return (
-    <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-6 sm:p-8 hover:border-gray-700 transition-all duration-300 animate-fade-in">
+    <div className="bg-white/5 border border-white/10 rounded-xl p-6 sm:p-8">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center ring-2 ring-red-500/20 ring-offset-2 ring-offset-gray-900">
+            <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
               <span className="text-lg">✕</span>
             </div>
             <div>
@@ -190,25 +190,24 @@ export default function TokenStatus({ isConnected, walletAddress, onTokenStatus 
               <p className="text-xs text-gray-500">Wallet connected</p>
             </div>
           </div>
-          <div className="px-3 py-1 rounded-full bg-red-500/20 border border-red-500/30 text-red-400 text-sm font-medium">
-            Need token to post
+          <div className="px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-medium">
+            Access Denied
           </div>
         </div>
         
-        <div className="pt-3 border-t border-gray-800 space-y-2">
+        <div className="pt-3 border-t border-white/10 space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-gray-400">SIP-010 Token Balance:</span>
+            <span className="text-sm text-gray-400">Token Balance:</span>
             <span className="text-sm font-semibold text-gray-500">0 tokens</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-sm text-gray-400">SIP-009 NFT Ownership:</span>
+            <span className="text-sm text-gray-400">NFT Ownership:</span>
             <span className="text-sm font-semibold text-gray-500">No</span>
           </div>
           <p className="text-xs text-gray-500 pt-2">
-            You need to hold the minimum amount of SIP-010 token or own at least 1 SIP-009 NFT to post messages.
+            You need to hold the minimum amount of token or own at least 1 NFT to post messages.
           </p>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }

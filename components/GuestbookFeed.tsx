@@ -128,18 +128,18 @@ const copyToClipboard = async (text: string, onSuccess: () => void) => {
 
 // Loading skeleton component
 const MessageSkeleton = () => (
-  <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6 space-y-4 animate-shimmer">
+  <div className="bg-white/5 border border-white/10 rounded-xl p-6 space-y-4 animate-shimmer">
     <div className="flex items-center gap-3">
-      <div className="w-10 h-10 rounded-full bg-gray-800 animate-pulse" />
+      <div className="w-10 h-10 rounded-full bg-white/10 animate-pulse" />
       <div className="space-y-2 flex-1">
-        <div className="h-4 bg-gray-800 rounded w-24 animate-pulse" />
-        <div className="h-3 bg-gray-800 rounded w-16 animate-pulse" />
+        <div className="h-4 bg-white/10 rounded w-24 animate-pulse" />
+        <div className="h-3 bg-white/10 rounded w-16 animate-pulse" />
       </div>
     </div>
     <div className="space-y-2">
-      <div className="h-4 bg-gray-800 rounded w-full animate-pulse" />
-      <div className="h-4 bg-gray-800 rounded w-5/6 animate-pulse" />
-      <div className="h-4 bg-gray-800 rounded w-4/6 animate-pulse" />
+      <div className="h-4 bg-white/10 rounded w-full animate-pulse" />
+      <div className="h-4 bg-white/10 rounded w-5/6 animate-pulse" />
+      <div className="h-4 bg-white/10 rounded w-4/6 animate-pulse" />
     </div>
   </div>
 );
@@ -159,21 +159,21 @@ const MessageCard = ({ msg }: { msg: Message }) => {
   const hasNftBadge = msg.hasSpecialNft;
 
   return (
-    <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6 hover:border-gray-700 hover:shadow-lg hover:shadow-purple-500/5 transition-all duration-300 group animate-fade-in">
+    <div className="bg-white/5 border border-white/10 rounded-xl p-6 hover:border-white/20 transition-all duration-200 group animate-fade-in">
       <div className="flex items-start justify-between gap-4 mb-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-purple-500/25 group-hover:scale-110 transition-transform duration-300">
+          <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-gray-900 font-semibold text-sm">
             {formatAddress(msg.address).slice(0, 2)}
           </div>
           <div className="flex items-center gap-2">
             <div>
               <div className="flex items-center gap-2">
-                <p className="text-sm font-medium text-white group-hover:text-purple-400 transition-colors">
+                <p className="text-sm font-medium text-white">
                   {formatAddress(msg.address)}
                 </p>
                 <button
                   onClick={handleCopy}
-                  className="opacity-0 group-hover:opacity-100 transition-all duration-300 p-1 hover:bg-gray-800 rounded active:scale-95"
+                  className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 p-1 hover:bg-white/10 rounded"
                   title="Copy address"
                 >
                   {copied ? (
@@ -195,14 +195,14 @@ const MessageCard = ({ msg }: { msg: Message }) => {
         {/* Badges */}
         <div className="flex items-center gap-2">
           {hasNftBadge && (
-            <div className="px-2 py-1 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-400 text-xs font-medium flex items-center gap-1 hover:bg-purple-500/30 transition-colors">
+            <div className="px-2 py-1 rounded-full bg-white/10 border border-white/20 text-gray-300 text-xs font-medium flex items-center gap-1">
               <span>💎</span>
               <span className="hidden sm:inline">NFT Holder</span>
               <span className="sm:hidden">NFT</span>
             </div>
           )}
           {hasBadge && !hasNftBadge && (
-            <div className="px-2 py-1 rounded-full bg-yellow-500/20 border border-yellow-500/30 text-yellow-400 text-xs font-medium flex items-center gap-1 hover:bg-yellow-500/30 transition-colors">
+            <div className="px-2 py-1 rounded-full bg-white/10 border border-white/20 text-gray-300 text-xs font-medium flex items-center gap-1">
               <span>⭐</span>
               <span className="hidden sm:inline">Top Holder</span>
               <span className="sm:hidden">Top</span>
@@ -211,7 +211,7 @@ const MessageCard = ({ msg }: { msg: Message }) => {
         </div>
       </div>
       
-      <p className="text-gray-300 leading-relaxed text-sm sm:text-base group-hover:text-gray-200 transition-colors">{msg.message}</p>
+      <p className="text-gray-300 leading-relaxed text-sm sm:text-base">{msg.message}</p>
     </div>
   );
 };
@@ -220,11 +220,10 @@ export default function GuestbookFeed({ newMessage }: GuestbookFeedProps) {
   const { messages, isLoading, isInitialLoad, refreshMessages } = useGuestbookMessages(newMessage);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-2xl font-bold text-white flex items-center gap-2">
-            <span className="w-2 h-2 bg-purple-500 rounded-full animate-pulse" />
+          <h3 className="text-2xl font-bold text-white">
             Guestbook Messages
           </h3>
           <p className="text-sm text-gray-500 mt-1">
@@ -234,7 +233,7 @@ export default function GuestbookFeed({ newMessage }: GuestbookFeedProps) {
         <button
           onClick={refreshMessages}
           disabled={isLoading}
-          className="group px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 hover:scale-105 active:scale-95 disabled:hover:scale-100"
+          className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-gray-300 text-sm font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
           {isLoading ? (
             <>
@@ -244,7 +243,7 @@ export default function GuestbookFeed({ newMessage }: GuestbookFeedProps) {
             </>
           ) : (
             <>
-              <svg className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
               <span className="hidden sm:inline">Refresh</span>

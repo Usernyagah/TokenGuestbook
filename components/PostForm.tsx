@@ -130,12 +130,12 @@ export default function PostForm({ hasToken, isConnected, walletAddress, onMessa
 
   if (!isConnected) {
     return (
-      <div className="bg-gray-900/30 border border-gray-800 rounded-2xl p-6 sm:p-8 hover:border-gray-700 transition-all duration-300 animate-fade-in">
+      <div className="bg-white/5 border border-white/10 rounded-xl p-6 sm:p-8">
         <div className="text-center py-8">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-800 flex items-center justify-center ring-2 ring-gray-700 ring-offset-2 ring-offset-gray-900">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/10 flex items-center justify-center">
             <span className="text-3xl">🔒</span>
           </div>
-          <h3 className="text-lg font-semibold text-gray-400 mb-2">Connect Your Wallet</h3>
+          <h3 className="text-base font-semibold text-white mb-2">Connect Your Wallet</h3>
           <p className="text-sm text-gray-500">Connect your wallet to post messages</p>
         </div>
       </div>
@@ -144,16 +144,16 @@ export default function PostForm({ hasToken, isConnected, walletAddress, onMessa
 
   if (!hasToken) {
     return (
-      <div className="bg-gray-900/30 border border-gray-800 rounded-2xl p-6 sm:p-8 opacity-60 hover:opacity-70 transition-all duration-300 animate-fade-in">
+      <div className="bg-white/5 border border-white/10 rounded-xl p-6 sm:p-8 opacity-50">
         <div className="text-center py-8">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-800 flex items-center justify-center ring-2 ring-red-500/20 ring-offset-2 ring-offset-gray-900">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/10 flex items-center justify-center">
             <span className="text-3xl">🚫</span>
           </div>
-          <h3 className="text-lg font-semibold text-gray-400 mb-2">Token Required</h3>
+          <h3 className="text-base font-semibold text-white mb-2">Token Required</h3>
           <p className="text-sm text-gray-500 mb-4">You need to hold the required token to post messages</p>
           <div className="text-xs text-gray-600 space-y-1">
-            <p>• Minimum SIP-010 token balance OR</p>
-            <p>• At least 1 SIP-009 NFT</p>
+            <p>• Minimum token balance OR</p>
+            <p>• At least 1 NFT</p>
           </div>
         </div>
       </div>
@@ -161,7 +161,7 @@ export default function PostForm({ hasToken, isConnected, walletAddress, onMessa
   }
 
   return (
-    <div className="bg-gradient-to-br from-gray-900/50 to-gray-800/50 border border-gray-700 rounded-2xl p-6 sm:p-8 relative hover:border-gray-600 transition-all duration-300 shadow-lg">
+    <div className="bg-white/5 border border-white/10 rounded-xl p-6 sm:p-8 relative">
       {/* Toast Notification */}
       {toast && (
         <div className={`absolute top-4 right-4 left-4 sm:left-auto sm:w-80 px-4 py-3 rounded-lg shadow-xl z-10 animate-slide-down backdrop-blur-sm ${
@@ -176,30 +176,27 @@ export default function PostForm({ hasToken, isConnected, walletAddress, onMessa
         </div>
       )}
 
-      <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-        <span className="w-2 h-2 bg-purple-500 rounded-full animate-pulse" />
-        Post a Message
-      </h3>
+      <h3 className="text-lg font-semibold text-white mb-4">Post a Message</h3>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="relative">
           <textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Share your thoughts with the community..."
-            className={`w-full px-4 py-3 bg-gray-950/50 border rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent resize-none transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${
+            className={`w-full px-4 py-3 bg-white/5 border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent resize-none transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
               isNearLimit && charsRemaining >= 0
-                ? 'border-yellow-500/50 focus:ring-yellow-500/50'
+                ? 'border-yellow-500/30 focus:ring-yellow-500/20'
                 : charsRemaining < 0
-                ? 'border-red-500/50 focus:ring-red-500/50'
-                : 'border-gray-700 focus:ring-purple-500/50'
+                ? 'border-red-500/30 focus:ring-red-500/20'
+                : 'border-white/10 focus:ring-white/20'
             }`}
             rows={4}
             maxLength={280}
             disabled={isSubmitting}
           />
-          <div className="absolute bottom-3 right-3 text-xs font-medium transition-colors duration-300">
+          <div className="absolute bottom-3 right-3 text-xs font-medium transition-colors duration-200">
             {charsRemaining < 0 ? (
-              <span className="text-red-400 animate-pulse">{Math.abs(charsRemaining)} over</span>
+              <span className="text-red-400">{Math.abs(charsRemaining)} over</span>
             ) : isNearLimit ? (
               <span className="text-yellow-400">{charsRemaining}</span>
             ) : (
@@ -209,7 +206,7 @@ export default function PostForm({ hasToken, isConnected, walletAddress, onMessa
         </div>
         <div className="flex justify-between items-center">
           {remainingCooldown > 0 && (
-            <span className="text-xs text-yellow-400 flex items-center gap-1 animate-pulse">
+            <span className="text-xs text-gray-500 flex items-center gap-1">
               <span>⏱️</span>
               <span>Wait {Math.ceil(remainingCooldown / 1000)}s to post again</span>
             </span>
@@ -217,11 +214,11 @@ export default function PostForm({ hasToken, isConnected, walletAddress, onMessa
           <button
             type="submit"
             disabled={isFormDisabled}
-            className="ml-auto px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:scale-105 active:scale-95 disabled:hover:scale-100"
+            className="ml-auto px-6 py-2.5 rounded-lg bg-white text-gray-900 font-medium text-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 disabled:hover:bg-white"
           >
             {isSubmitting ? (
               <span className="flex items-center justify-center gap-2">
-                <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <span className="w-4 h-4 border-2 border-gray-300 border-t-transparent rounded-full animate-spin" />
                 <span className="hidden sm:inline">Posting...</span>
                 <span className="sm:hidden">...</span>
               </span>
@@ -232,13 +229,7 @@ export default function PostForm({ hasToken, isConnected, walletAddress, onMessa
                 <span className="sm:hidden">{Math.ceil(remainingCooldown / 1000)}s</span>
               </span>
             ) : (
-              <span className="flex items-center justify-center gap-2">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                </svg>
-                <span className="hidden sm:inline">Post Message</span>
-                <span className="sm:hidden">Post</span>
-              </span>
+              <span className="hidden sm:inline">Post Message</span>
             )}
           </button>
         </div>

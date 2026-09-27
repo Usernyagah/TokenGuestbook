@@ -36,7 +36,7 @@ export default function Home() {
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <Hero />
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
           <div className="lg:col-span-1">
             <TokenStatus 
               isConnected={isConnected} 
@@ -54,32 +54,32 @@ export default function Home() {
           </div>
         </div>
         
-        <div className="pb-16">
+        <div className="pb-20">
           <GuestbookFeed newMessage={newMessage} />
         </div>
       </main>
       
-      <footer className="border-t border-gray-800 bg-gray-950/50 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <footer className="border-t border-white/10 bg-gray-950/50 backdrop-blur-sm">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">TG</span>
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-white text-gray-900 flex items-center justify-center font-bold text-sm">
+                  TG
                 </div>
                 <h4 className="text-lg font-semibold text-white">Token Guestbook</h4>
               </div>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 leading-relaxed">
                 A token-gated guestbook built on Stacks blockchain. Leave your mark on the decentralized web.
               </p>
             </div>
             
             <div className="space-y-4">
               <h5 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Contract</h5>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <a
                   href="#"
-                  className="flex items-center gap-2 text-sm text-gray-500 hover:text-purple-400 transition-colors group"
+                  className="flex items-center gap-2 text-sm text-gray-500 hover:text-white transition-colors group"
                 >
                   <svg className="w-4 h-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
@@ -88,7 +88,7 @@ export default function Home() {
                 </a>
                 <a
                   href="#"
-                  className="flex items-center gap-2 text-sm text-gray-500 hover:text-purple-400 transition-colors group"
+                  className="flex items-center gap-2 text-sm text-gray-500 hover:text-white transition-colors group"
                 >
                   <svg className="w-4 h-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -101,42 +101,42 @@ export default function Home() {
             <div className="space-y-4">
               <h5 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Built With</h5>
               <div className="flex flex-wrap gap-2">
-                <span className="px-3 py-1 rounded-full bg-gray-800 border border-gray-700 text-xs text-gray-400 hover:border-purple-500/50 transition-colors">
+                <span className="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-gray-400">
                   Stacks
                 </span>
-                <span className="px-3 py-1 rounded-full bg-gray-800 border border-gray-700 text-xs text-gray-400 hover:border-purple-500/50 transition-colors">
+                <span className="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-gray-400">
                   Next.js
                 </span>
-                <span className="px-3 py-1 rounded-full bg-gray-800 border border-gray-700 text-xs text-gray-400 hover:border-purple-500/50 transition-colors">
+                <span className="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-gray-400">
                   Clarity
                 </span>
-                <span className="px-3 py-1 rounded-full bg-gray-800 border border-gray-700 text-xs text-gray-400 hover:border-purple-500/50 transition-colors">
+                <span className="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-gray-400">
                   Tailwind
                 </span>
               </div>
             </div>
           </div>
           
-          <div className="mt-8 pt-8 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div className="mt-12 pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4">
             <p className="text-xs text-gray-600">
               © 2024 Token Guestbook. Built on Stacks.
             </p>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-6">
               <a
                 href="#"
-                className="text-xs text-gray-600 hover:text-purple-400 transition-colors"
+                className="text-xs text-gray-600 hover:text-white transition-colors"
               >
                 Privacy
               </a>
               <a
                 href="#"
-                className="text-xs text-gray-600 hover:text-purple-400 transition-colors"
+                className="text-xs text-gray-600 hover:text-white transition-colors"
               >
                 Terms
               </a>
               <a
                 href="#"
-                className="text-xs text-gray-600 hover:text-purple-400 transition-colors"
+                className="text-xs text-gray-600 hover:text-white transition-colors"
               >
                 GitHub
               </a>
