@@ -65,14 +65,13 @@ interface TokenStatusProps {
   isConnected: boolean;
   walletAddress: string | null;
   onTokenStatus: (hasToken: boolean) => void;
-  onError?: (error: string) => void;
 }
 
 const formatAddress = (address: string) => {
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
 };
 
-export default function TokenStatus({ isConnected, walletAddress, onTokenStatus, onError }: TokenStatusProps) {
+export default function TokenStatus({ isConnected, walletAddress, onTokenStatus }: TokenStatusProps) {
   const { result, checkToken, resetToken } = useTokenCheck();
 
   // Handle wallet connection/disconnection

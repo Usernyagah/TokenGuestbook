@@ -13,7 +13,6 @@ interface Message {
 
 interface GuestbookFeedProps {
   newMessage?: { message: string; address: string } | null;
-  onError?: (error: string) => void;
 }
 
 // Placeholder data - will be replaced with actual blockchain data
@@ -217,7 +216,7 @@ const MessageCard = ({ msg }: { msg: Message }) => {
   );
 };
 
-export default function GuestbookFeed({ newMessage, onError }: GuestbookFeedProps) {
+export default function GuestbookFeed({ newMessage }: GuestbookFeedProps) {
   const { messages, isLoading, isInitialLoad, refreshMessages } = useGuestbookMessages(newMessage);
 
   return (

@@ -7,7 +7,6 @@ interface PostFormProps {
   isConnected: boolean;
   walletAddress: string | null;
   onMessagePost?: (message: string, address: string) => void;
-  onError?: (error: string) => void;
 }
 
 interface ToastMessage {
@@ -52,7 +51,7 @@ const getRemainingCooldown = (walletAddress: string | null): number => {
   return Math.max(0, remaining);
 };
 
-export default function PostForm({ hasToken, isConnected, walletAddress, onMessagePost, onError }: PostFormProps) {
+export default function PostForm({ hasToken, isConnected, walletAddress, onMessagePost }: PostFormProps) {
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [toast, setToast] = useState<ToastMessage | null>(null);

@@ -12,14 +12,12 @@ export default function Home() {
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [hasToken, setHasToken] = useState(false);
   const [newMessage, setNewMessage] = useState<{ message: string; address: string } | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
   // These states will be managed by the actual Scaffold Stacks hooks
   // For now, they're placeholders for the UI structure
   const handleWalletConnect = (connected: boolean, address: string | null) => {
     setIsConnected(connected);
     setWalletAddress(address);
-    setError(null);
     // Token status is now managed by TokenStatus component via onTokenStatus callback
     if (!connected) {
       setHasToken(false);
@@ -31,34 +29,9 @@ export default function Home() {
     setNewMessage({ message, address });
   };
 
-  const handleError = (errorMessage: string) => {
-    setError(errorMessage);
-    setTimeout(() => setError(null), 5000);
-  };
-
   return (
     <div className="min-h-screen">
       <Header onConnect={handleWalletConnect} />
-      
-      {/* Error banner */}
-      {error && (
-        <div className="bg-red-500/10 border-b border-red-500/30 px-4 py-3 animate-slide-down">
-          <div className="max-w-6xl mx-auto flex items-center justify-between">
-            <div className="flex items-center gap-2 text-red-400">
-              <span className="text-lg">⚠️</span>
-              <span className="text-sm">{error}</span>
-            </div>
-            <button
-              onClick={() => setError(null)}
-              className="text-red-400 hover:text-red-300 transition-colors"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      )}
       
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <Hero />
@@ -69,7 +42,6 @@ export default function Home() {
               isConnected={isConnected} 
               walletAddress={walletAddress} 
               onTokenStatus={setHasToken}
-              onError={handleError}
             />
           </div>
           <div className="lg:col-span-2">
@@ -78,13 +50,12 @@ export default function Home() {
               isConnected={isConnected} 
               walletAddress={walletAddress}
               onMessagePost={handleMessagePost}
-              onError={handleError}
             />
           </div>
         </div>
         
         <div className="pb-16">
-          <GuestbookFeed newMessage={newMessage} onError={handleError} />
+          <GuestbookFeed newMessage={newMessage} />
         </div>
       </main>
       
