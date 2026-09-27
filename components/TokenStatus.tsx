@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from "react";
 
-// Token types for SIP-010 and SIP-009
 type TokenType = 'SIP010' | 'SIP009' | 'NONE';
 
 interface TokenCheckResult {
@@ -13,7 +12,6 @@ interface TokenCheckResult {
   isLoading: boolean;
 }
 
-// Placeholder hooks - will be replaced with Scaffold Stacks hooks
 const useTokenCheck = () => {
   const [result, setResult] = useState<TokenCheckResult>({
     hasAccess: false,
@@ -33,10 +31,7 @@ const useTokenCheck = () => {
     
     setResult(prev => ({ ...prev, isLoading: true }));
     
-    // Placeholder: Will use Scaffold Stacks hooks to check both SIP-010 token balance and SIP-009 NFT ownership
-    // Simulating optimistic UI with delay
     setTimeout(() => {
-      // Randomly choose between token or NFT for demo purposes
       const hasToken = Math.random() > 0.3;
       const isNft = Math.random() > 0.5;
       
@@ -68,13 +63,12 @@ interface TokenStatusProps {
 }
 
 const formatAddress = (address: string) => {
-  return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  return address.slice(0, 6) + "..." + address.slice(-4);
 };
 
 export default function TokenStatus({ isConnected, walletAddress, onTokenStatus }: TokenStatusProps) {
   const { result, checkToken, resetToken } = useTokenCheck();
 
-  // Handle wallet connection/disconnection
   useEffect(() => {
     if (isConnected && walletAddress && !result.isLoading && result.tokenType === 'NONE') {
       checkToken(walletAddress);
@@ -83,7 +77,6 @@ export default function TokenStatus({ isConnected, walletAddress, onTokenStatus 
     }
   }, [isConnected, walletAddress, result.isLoading, result.tokenType, checkToken, resetToken]);
 
-  // Notify parent when token status changes
   useEffect(() => {
     onTokenStatus(result.hasAccess);
   }, [result.hasAccess, onTokenStatus]);
@@ -104,7 +97,6 @@ export default function TokenStatus({ isConnected, walletAddress, onTokenStatus 
     );
   }
 
-  // Optimistic loading state with address shown
   if (result.isLoading) {
     return (
       <div className="bg-white/5 border border-white/10 rounded-xl p-6 sm:p-8">
@@ -134,7 +126,6 @@ export default function TokenStatus({ isConnected, walletAddress, onTokenStatus 
     );
   }
 
-  // User has access (either token or NFT)
   if (result.hasAccess) {
     return (
       <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-6 sm:p-8">
@@ -174,7 +165,6 @@ export default function TokenStatus({ isConnected, walletAddress, onTokenStatus 
     );
   }
 
-  // User does not have access
   return (
     <div className="bg-white/5 border border-white/10 rounded-xl p-6 sm:p-8">
       <div className="space-y-4">
@@ -209,6 +199,6 @@ export default function TokenStatus({ isConnected, walletAddress, onTokenStatus 
           </p>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
