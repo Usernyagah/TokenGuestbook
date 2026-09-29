@@ -1,0 +1,326 @@
+{
+  "fingerprint": "e315628dd7b8204f23ac2c26f84d4773e8c772edda237e6e98d3f4fdd6165961",
+  "abis": [
+    {
+      "contract_id": "ST2T6C1JTXS6AVQ4PTSQNS0MF666191WNC77NC2F.guestbook",
+      "contract_name": "guestbook",
+      "functions": [
+        {
+          "name": "post-message",
+          "access": "public",
+          "args": [
+            {
+              "name": "content",
+              "type": {
+                "string-utf8": {
+                  "length": 280
+                }
+              }
+            }
+          ],
+          "outputs": {
+            "response": {
+              "ok": "uint128",
+              "error": "uint128"
+            }
+          }
+        },
+        {
+          "name": "can-post",
+          "access": "read_only",
+          "args": [
+            {
+              "name": "user",
+              "type": "principal"
+            }
+          ],
+          "outputs": "bool"
+        },
+        {
+          "name": "get-message",
+          "access": "read_only",
+          "args": [
+            {
+              "name": "message-id",
+              "type": "uint128"
+            }
+          ],
+          "outputs": {
+            "response": {
+              "ok": {
+                "tuple": [
+                  {
+                    "name": "author",
+                    "type": "principal"
+                  },
+                  {
+                    "name": "block-height",
+                    "type": "uint128"
+                  },
+                  {
+                    "name": "content",
+                    "type": {
+                      "string-utf8": {
+                        "length": 280
+                      }
+                    }
+                  },
+                  {
+                    "name": "timestamp",
+                    "type": "uint128"
+                  }
+                ]
+              },
+              "error": "uint128"
+            }
+          }
+        },
+        {
+          "name": "get-message-count",
+          "access": "read_only",
+          "args": [],
+          "outputs": "uint128"
+        }
+      ],
+      "variables": [
+        {
+          "name": "CONTRACT_OWNER",
+          "access": "constant",
+          "type": "principal"
+        },
+        {
+          "name": "MAX_MESSAGE_LENGTH",
+          "access": "constant",
+          "type": "uint128"
+        },
+        {
+          "name": "message-count",
+          "access": "variable",
+          "type": "uint128"
+        }
+      ],
+      "maps": [
+        {
+          "name": "messages",
+          "key": "uint128",
+          "value": {
+            "tuple": [
+              {
+                "name": "author",
+                "type": "principal"
+              },
+              {
+                "name": "block-height",
+                "type": "uint128"
+              },
+              {
+                "name": "content",
+                "type": {
+                  "string-utf8": {
+                    "length": 280
+                  }
+                }
+              },
+              {
+                "name": "timestamp",
+                "type": "uint128"
+              }
+            ]
+          }
+        }
+      ],
+      "fungible_tokens": [],
+      "non_fungible_tokens": []
+    },
+    {
+      "contract_id": "ST2T6C1JTXS6AVQ4PTSQNS0MF666191WNC77NC2F.access-token",
+      "contract_name": "access-token",
+      "functions": [
+        {
+          "name": "burn",
+          "access": "public",
+          "args": [
+            {
+              "name": "amount",
+              "type": "uint128"
+            }
+          ],
+          "outputs": {
+            "response": {
+              "ok": "bool",
+              "error": "uint128"
+            }
+          }
+        },
+        {
+          "name": "mint",
+          "access": "public",
+          "args": [
+            {
+              "name": "amount",
+              "type": "uint128"
+            },
+            {
+              "name": "recipient",
+              "type": "principal"
+            }
+          ],
+          "outputs": {
+            "response": {
+              "ok": "bool",
+              "error": "uint128"
+            }
+          }
+        },
+        {
+          "name": "transfer",
+          "access": "public",
+          "args": [
+            {
+              "name": "amount",
+              "type": "uint128"
+            },
+            {
+              "name": "sender",
+              "type": "principal"
+            },
+            {
+              "name": "recipient",
+              "type": "principal"
+            },
+            {
+              "name": "memo",
+              "type": {
+                "optional": {
+                  "buffer": {
+                    "length": 256
+                  }
+                }
+              }
+            }
+          ],
+          "outputs": {
+            "response": {
+              "ok": "bool",
+              "error": "uint128"
+            }
+          }
+        },
+        {
+          "name": "get-balance",
+          "access": "read_only",
+          "args": [
+            {
+              "name": "account",
+              "type": "principal"
+            }
+          ],
+          "outputs": {
+            "response": {
+              "ok": "uint128",
+              "error": "none"
+            }
+          }
+        },
+        {
+          "name": "get-decimals",
+          "access": "read_only",
+          "args": [],
+          "outputs": {
+            "response": {
+              "ok": "uint128",
+              "error": "none"
+            }
+          }
+        },
+        {
+          "name": "get-name",
+          "access": "read_only",
+          "args": [],
+          "outputs": {
+            "response": {
+              "ok": {
+                "string-ascii": {
+                  "length": 12
+                }
+              },
+              "error": "none"
+            }
+          }
+        },
+        {
+          "name": "get-symbol",
+          "access": "read_only",
+          "args": [],
+          "outputs": {
+            "response": {
+              "ok": {
+                "string-ascii": {
+                  "length": 6
+                }
+              },
+              "error": "none"
+            }
+          }
+        },
+        {
+          "name": "get-total-supply",
+          "access": "read_only",
+          "args": [],
+          "outputs": {
+            "response": {
+              "ok": "uint128",
+              "error": "none"
+            }
+          }
+        }
+      ],
+      "variables": [
+        {
+          "name": "CONTRACT_OWNER",
+          "access": "constant",
+          "type": "principal"
+        },
+        {
+          "name": "TOKEN_DECIMALS",
+          "access": "constant",
+          "type": "uint128"
+        },
+        {
+          "name": "TOKEN_NAME",
+          "access": "constant",
+          "type": {
+            "string-ascii": {
+              "length": 12
+            }
+          }
+        },
+        {
+          "name": "TOKEN_SYMBOL",
+          "access": "constant",
+          "type": {
+            "string-ascii": {
+              "length": 6
+            }
+          }
+        },
+        {
+          "name": "TOTAL_SUPPLY",
+          "access": "constant",
+          "type": "uint128"
+        },
+        {
+          "name": "total-supply",
+          "access": "variable",
+          "type": "uint128"
+        }
+      ],
+      "maps": [],
+      "fungible_tokens": [
+        "access-token"
+      ],
+      "non_fungible_tokens": []
+    }
+  ],
+  "cached_at": "2026-09-29T15:22:07.304Z"
+}

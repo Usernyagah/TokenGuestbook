@@ -1,0 +1,7 @@
+[network]
+name = "devnet"
+deployment_fee_rate = 10
+
+[accounts.deployer]
+mnemonic = "describe humble talent oven exercise earth miracle light master position defy wool pioneer inhale boss jeans situate humor health dilemma loan rack garage drift"
+balance = 100000000000000

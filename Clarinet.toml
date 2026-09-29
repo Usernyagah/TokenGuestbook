@@ -1,0 +1,44 @@
+[project]
+name = "token-guestbook"
+description = "A token-gated guestbook dapp built on Stacks"
+authors = ["TokenGuestbook"]
+telemetry = true
+cache_dir = "./.cache"
+
+[contracts.access-token]
+path = "contracts/access-token.clar"
+clarity_version = 2
+epoch = "2.4"
+
+[contracts.guestbook-v2]
+path = "contracts/guestbook-v2.clar"
+clarity_version = 2
+epoch = "2.4"
+depends_on = ["access-token"]
+
+[repl]
+genesis_account_balance = "1000000000000000"
+
+[accounts.deployer]
+mnemonic = "describe humble talent oven exercise earth miracle light master position defy wool pioneer inhale boss jeans situate humor health dilemma loan rack garage drift"
+balance = "100000000000000000"
+
+[accounts.wallet_1]
+mnemonic = "exhibit inform hate imitate valve frame ladder float bronze exclude width core"
+balance = "1000000000000000"
+
+[accounts.wallet_2]
+mnemonic = "orbit shadow soccer crisp squeeze abstract inherit heavy illegal entry mirror empty"
+balance = "1000000000000000"
+
+[accounts.wallet_3]
+mnemonic = "cactus recall attract uniform act mesh ensure shed engage physical enemy vacuum"
+balance = "1000000000000000"
+
+[networks]
+mainnet = { name = "mainnet", chain_id = "0x0000000000000000000000000000000000000000000000000000000000000001" }
+testnet = { name = "testnet", chain_id = "0x8000000000000000000000000000000000000000000000000000000000000000" }
+devnet = { name = "devnet", chain_id = "0x7fffffff" }
+
+[env.test]
+networks = ["testnet"]

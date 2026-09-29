@@ -1,0 +1,40 @@
+id: 0
+name: Simulated deployment, used as a default for `clarinet console`, `clarinet test` and `clarinet check`
+network: simnet
+genesis:
+  wallets:
+  - name: deployer
+    address: ST2T6C1JTXS6AVQ4PTSQNS0MF666191WNC77NC2F
+    balance: '100000000000000'
+    sbtc-balance: '1000000000'
+  contracts:
+  - genesis
+  - lockup
+  - bns
+  - cost-voting
+  - costs
+  - pox
+  - costs-2
+  - pox-2
+  - costs-3
+  - pox-3
+  - pox-4
+  - signers
+  - signers-voting
+  - costs-4
+  - pox-5
+plan:
+  batches:
+  - id: 0
+    transactions:
+    - transaction-type: emulated-contract-publish
+      contract-name: access-token
+      emulated-sender: ST2T6C1JTXS6AVQ4PTSQNS0MF666191WNC77NC2F
+      path: contracts/access-token.clar
+      clarity-version: 2
+    - transaction-type: emulated-contract-publish
+      contract-name: guestbook
+      emulated-sender: ST2T6C1JTXS6AVQ4PTSQNS0MF666191WNC77NC2F
+      path: contracts/guestbook.clar
+      clarity-version: 2
+    epoch: '2.4'
