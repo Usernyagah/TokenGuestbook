@@ -1,0 +1,8 @@
+{
+  "network": "testnet",
+  "deployed_at": "2026-09-29T15:22:12.000Z",
+  "contracts": {
+    "access-token": "ST2T6C1JTXS6AVQ4PTSQNS0MF666191WNC77NC2F.access-token",
+    "guestbook": "ST2T6C1JTXS6AVQ4PTSQNS0MF666191WNC77NC2F.guestbook"
+  }
+}
