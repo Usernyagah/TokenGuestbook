@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { usePostMessage } from '@/src/generated/hooks';
 
 interface PostFormProps {
   hasToken: boolean;
@@ -53,9 +54,9 @@ const getRemainingCooldown = (walletAddress: string | null): number => {
 
 export default function PostForm({ hasToken, isConnected, walletAddress, onMessagePost }: PostFormProps) {
   const [message, setMessage] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [toast, setToast] = useState<ToastMessage | null>(null);
   const [remainingCooldown, setRemainingCooldown] = useState(0);
+  const { postMessage, isLoading: isSubmitting, error: postError, txId } = usePostMessage();
 
   // Update cooldown countdown
   useEffect(() => {
@@ -99,11 +100,8 @@ export default function PostForm({ hasToken, isConnected, walletAddress, onMessa
       return;
     }
 
-    setIsSubmitting(true);
-
     try {
-      // Placeholder: Will use Scaffold Stacks hooks to post message to blockchain
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await postMessage(message);
 
       // Optimistic update - add message to feed immediately
       if (onMessagePost) {
@@ -118,9 +116,7 @@ export default function PostForm({ hasToken, isConnected, walletAddress, onMessa
       setMessage("");
       showToast('success', 'Message posted successfully!');
     } catch (error) {
-      showToast('error', 'Failed to post message. Please try again.');
-    } finally {
-      setIsSubmitting(false);
+      showToast('error', postError || 'Failed to post message. Please try again.');
     }
   };
 

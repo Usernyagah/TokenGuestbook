@@ -13,12 +13,9 @@ export default function Home() {
   const [hasToken, setHasToken] = useState(false);
   const [newMessage, setNewMessage] = useState<{ message: string; address: string } | null>(null);
 
-  // These states will be managed by the actual Scaffold Stacks hooks
-  // For now, they're placeholders for the UI structure
   const handleWalletConnect = (connected: boolean, address: string | null) => {
     setIsConnected(connected);
     setWalletAddress(address);
-    // Token status is now managed by TokenStatus component via onTokenStatus callback
     if (!connected) {
       setHasToken(false);
     }
@@ -78,7 +75,9 @@ export default function Home() {
               <h5 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Contract</h5>
               <div className="space-y-3">
                 <a
-                  href="#"
+                  href="https://testnet.explorer.stacks.co/address/ST2C947592C8D33GE30PYAC71B4CD6QFR8G1EEKMS"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-2 text-sm text-gray-500 hover:text-white transition-colors group"
                 >
                   <svg className="w-4 h-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -87,7 +86,9 @@ export default function Home() {
                   <span>View on Explorer</span>
                 </a>
                 <a
-                  href="#"
+                  href="https://github.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-2 text-sm text-gray-500 hover:text-white transition-colors group"
                 >
                   <svg className="w-4 h-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -135,7 +136,9 @@ export default function Home() {
                 Terms
               </a>
               <a
-                href="#"
+                href="https://github.com"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-xs text-gray-600 hover:text-white transition-colors"
               >
                 GitHub

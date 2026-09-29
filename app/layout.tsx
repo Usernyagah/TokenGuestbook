@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { WalletProvider } from "@/contexts/WalletContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,9 +18,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark scroll-smooth">
       <body className={`${inter.className} bg-gray-950 text-gray-100 min-h-screen`}>
-        <div className="animate-fade-in">
-          {children}
-        </div>
+        <WalletProvider>
+          <div className="animate-fade-in">
+            {children}
+          </div>
+        </WalletProvider>
       </body>
     </html>
   );

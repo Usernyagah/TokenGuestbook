@@ -1,99 +1,62 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-
-interface Message {
-  id: number;
-  address: string;
-  message: string;
-  timestamp: string;
-  tokenBalance?: number;
-  hasSpecialNft?: boolean;
-}
+import { useGuestbookMessages, Message } from '@/src/generated/hooks';
 
 interface GuestbookFeedProps {
   newMessage?: { message: string; address: string } | null;
 }
 
-// Placeholder data - will be replaced with actual blockchain data
-const placeholderMessages: Message[] = [
-  {
-    id: 1,
-    address: "SP3K8BC0PPEVCV7NZ6QSRWPV2W9BM5CDGEY8QTV0M",
-    message: "Just minted my first token! This guestbook is amazing 🔥",
-    timestamp: new Date(Date.now() - 3600000).toISOString(),
-    tokenBalance: 500,
-  },
-  {
-    id: 2,
-    address: "SP2ZKJSM4V2Z5X8Y9Q0R1T2U3V4W5X6Y7Z8A9B0C1",
-    message: "Building on Stacks is the future. Love the community!",
-    timestamp: new Date(Date.now() - 7200000).toISOString(),
-    hasSpecialNft: true,
-  },
-  {
-    id: 3,
-    address: "SP1A2B3C4D5E6F7G8H9I0J1K2L3M4N5O6P7Q8R9S0",
-    message: "Hello from the Stacks ecosystem! 🚀",
-    timestamp: new Date(Date.now() - 86400000).toISOString(),
-    tokenBalance: 1000,
-  },
-];
-
 const AUTO_REFRESH_INTERVAL = 25000; // 25 seconds
 
-// Placeholder hooks - will be replaced with Scaffold Stacks hooks
-const useGuestbookMessages = (newMessage?: { message: string; address: string } | null) => {
-  const [messages, setMessages] = useState<Message[]>(placeholderMessages);
-  const [isLoading, setIsLoading] = useState(false);
+const useGuestbookMessagesWrapper = (newMessage?: { message: string; address: string } | null) => {
+  const { messages, isLoading, error, refetch } = useGuestbookMessages(50);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
-  const refreshMessages = useCallback(async () => {
-    setIsLoading(true);
-    // Placeholder: Will use Scaffold Stacks hooks to fetch messages from blockchain
-    setTimeout(() => {
-      setIsLoading(false);
-      setIsInitialLoad(false);
-    }, 1000);
-  }, []);
+  // Convert bigint messages to frontend format
+  const frontendMessages = messages.map(msg => ({
+    id: Number(msg.id),
+    address: msg.author,
+    message: msg.content,
+    timestamp: new Date(Number(msg.timestamp) * 1000).toISOString(),
+    tokenBalance: undefined, // Could be fetched separately
+    hasSpecialNft: false, // Could be fetched separately
+  }));
 
   // Optimistically add new message
   useEffect(() => {
     if (newMessage) {
-      const optimisticMessage: Message = {
+      const optimisticMessage = {
         id: Date.now(),
         address: newMessage.address,
         message: newMessage.message,
         timestamp: new Date().toISOString(),
       };
-      setMessages(prev => {
-        // Check if message already exists to prevent duplicates
-        const exists = prev.some(m => 
-          m.address === newMessage.address && 
-          m.message === newMessage.message &&
-          Math.abs(new Date(m.timestamp).getTime() - Date.now()) < 5000
-        );
-        if (exists) return prev;
-        return [optimisticMessage, ...prev];
-      });
       
       // Refresh after a short delay to sync with blockchain
       setTimeout(() => {
-        refreshMessages();
+        refetch();
       }, 2000);
     }
-  }, [newMessage, refreshMessages]);
+  }, [newMessage, refetch]);
 
   // Auto-refresh every 25 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      refreshMessages();
+      refetch();
     }, AUTO_REFRESH_INTERVAL);
 
     return () => clearInterval(interval);
-  }, [refreshMessages]);
+  }, [refetch]);
 
-  return { messages, isLoading, isInitialLoad, refreshMessages };
+  // Set initial load to false after first fetch
+  useEffect(() => {
+    if (!isLoading) {
+      setIsInitialLoad(false);
+    }
+  }, [isLoading]);
+
+  return { messages: frontendMessages, isLoading, isInitialLoad, refetch, error };
 };
 
 const formatAddress = (address: string) => {
@@ -145,7 +108,7 @@ const MessageSkeleton = () => (
 );
 
 // Message card component
-const MessageCard = ({ msg }: { msg: Message }) => {
+const MessageCard = ({ msg }: { msg: any }) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -217,7 +180,7 @@ const MessageCard = ({ msg }: { msg: Message }) => {
 };
 
 export default function GuestbookFeed({ newMessage }: GuestbookFeedProps) {
-  const { messages, isLoading, isInitialLoad, refreshMessages } = useGuestbookMessages(newMessage);
+  const { messages, isLoading, isInitialLoad, refetch, error } = useGuestbookMessagesWrapper(newMessage);
 
   return (
     <div className="space-y-8">
@@ -231,7 +194,7 @@ export default function GuestbookFeed({ newMessage }: GuestbookFeedProps) {
           </p>
         </div>
         <button
-          onClick={refreshMessages}
+          onClick={refetch}
           disabled={isLoading}
           className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-gray-300 text-sm font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
@@ -252,6 +215,12 @@ export default function GuestbookFeed({ newMessage }: GuestbookFeedProps) {
           )}
         </button>
       </div>
+
+      {error && (
+        <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-red-400 text-sm">
+          Error loading messages: {error}
+        </div>
+      )}
 
       {/* Loading skeleton for initial load */}
       {isInitialLoad && isLoading ? (

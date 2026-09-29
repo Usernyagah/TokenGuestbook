@@ -1,60 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-
-type TokenType = 'SIP010' | 'SIP009' | 'NONE';
-
-interface TokenCheckResult {
-  hasAccess: boolean;
-  tokenType: TokenType;
-  balance?: number;
-  ownsNft?: boolean;
-  isLoading: boolean;
-}
-
-const useTokenCheck = () => {
-  const [result, setResult] = useState<TokenCheckResult>({
-    hasAccess: false,
-    tokenType: 'NONE',
-    isLoading: false,
-  });
-
-  const checkToken = useCallback(async (address: string | null) => {
-    if (!address) {
-      setResult({
-        hasAccess: false,
-        tokenType: 'NONE',
-        isLoading: false,
-      });
-      return;
-    }
-    
-    setResult(prev => ({ ...prev, isLoading: true }));
-    
-    setTimeout(() => {
-      const hasToken = Math.random() > 0.3;
-      const isNft = Math.random() > 0.5;
-      
-      setResult({
-        hasAccess: hasToken,
-        tokenType: hasToken ? (isNft ? 'SIP009' : 'SIP010') : 'NONE',
-        balance: hasToken && !isNft ? Math.floor(Math.random() * 1000) + 10 : undefined,
-        ownsNft: hasToken && isNft,
-        isLoading: false,
-      });
-    }, 1500);
-  }, []);
-
-  const resetToken = useCallback(() => {
-    setResult({
-      hasAccess: false,
-      tokenType: 'NONE',
-      isLoading: false,
-    });
-  }, []);
-
-  return { result, checkToken, resetToken };
-};
+import { useEffect } from "react";
+import { useTokenBalance, useCanPost } from '@/src/generated/hooks';
 
 interface TokenStatusProps {
   isConnected: boolean;
@@ -67,19 +14,16 @@ const formatAddress = (address: string) => {
 };
 
 export default function TokenStatus({ isConnected, walletAddress, onTokenStatus }: TokenStatusProps) {
-  const { result, checkToken, resetToken } = useTokenCheck();
+  const { balance, isLoading: balanceLoading, error: balanceError } = useTokenBalance(walletAddress);
+  const { canPost, isLoading: canPostLoading, error: canPostError } = useCanPost(walletAddress);
+
+  const isLoading = balanceLoading || canPostLoading;
+  const hasAccess = balance !== null && balance > BigInt(0);
+  const hasPostingPermission = canPost === true;
 
   useEffect(() => {
-    if (isConnected && walletAddress && !result.isLoading && result.tokenType === 'NONE') {
-      checkToken(walletAddress);
-    } else if (!isConnected && result.tokenType !== 'NONE') {
-      resetToken();
-    }
-  }, [isConnected, walletAddress, result.isLoading, result.tokenType, checkToken, resetToken]);
-
-  useEffect(() => {
-    onTokenStatus(result.hasAccess);
-  }, [result.hasAccess, onTokenStatus]);
+    onTokenStatus(hasAccess);
+  }, [hasAccess, onTokenStatus]);
 
   if (!isConnected) {
     return (
@@ -97,7 +41,7 @@ export default function TokenStatus({ isConnected, walletAddress, onTokenStatus 
     );
   }
 
-  if (result.isLoading) {
+  if (isLoading) {
     return (
       <div className="bg-white/5 border border-white/10 rounded-xl p-6 sm:p-8">
         <div className="space-y-4">
@@ -126,7 +70,7 @@ export default function TokenStatus({ isConnected, walletAddress, onTokenStatus 
     );
   }
 
-  if (result.hasAccess) {
+  if (hasAccess && hasPostingPermission) {
     return (
       <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-6 sm:p-8">
         <div className="space-y-4">
@@ -148,17 +92,10 @@ export default function TokenStatus({ isConnected, walletAddress, onTokenStatus 
           </div>
           
           <div className="pt-3 border-t border-green-500/20 space-y-2">
-            {result.tokenType === 'SIP010' && result.balance !== undefined ? (
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-400">Token Balance:</span>
-                <span className="text-sm font-semibold text-white">{result.balance} tokens</span>
-              </div>
-            ) : result.tokenType === 'SIP009' ? (
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-400">NFT Ownership:</span>
-                <span className="text-sm font-semibold text-white">Yes</span>
-              </div>
-            ) : null}
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-400">Token Balance:</span>
+              <span className="text-sm font-semibold text-white">{balance?.toString() || '0'} tokens</span>
+            </div>
           </div>
         </div>
       </div>
@@ -188,14 +125,15 @@ export default function TokenStatus({ isConnected, walletAddress, onTokenStatus 
         <div className="pt-3 border-t border-white/10 space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-sm text-gray-400">Token Balance:</span>
-            <span className="text-sm font-semibold text-gray-500">0 tokens</span>
+            <span className="text-sm font-semibold text-gray-500">{balance?.toString() || '0'} tokens</span>
           </div>
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-gray-400">NFT Ownership:</span>
-            <span className="text-sm font-semibold text-gray-500">No</span>
-          </div>
+          {balanceError && (
+            <p className="text-xs text-red-400 pt-2">
+              Error checking token status: {balanceError}
+            </p>
+          )}
           <p className="text-xs text-gray-500 pt-2">
-            You need to hold the minimum amount of token or own at least 1 NFT to post messages.
+            You need to hold at least 1 token to post messages.
           </p>
         </div>
       </div>
