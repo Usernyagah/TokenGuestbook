@@ -3,9 +3,10 @@
 
 "use client";
 import { useState, useCallback, useEffect } from 'react';
-import { ClarityValue } from '@stacks/transactions';
+import { ClarityValue, principalCV, stringUtf8CV, uintCV } from '@stacks/transactions';
 import * as contracts from './contracts';
 import { scaffoldConfig } from '../scaffold.config';
+
 
 type TxLifecycleStatus = 'pending' | 'success' | 'abort_by_response' | 'error';
 
@@ -1748,5 +1749,151 @@ export function useAccessToken_GetTotalSupply() {
 
   return { data, loading, error, txid, txStatus, txStatusError, explorerUrl, call };
 }
+
+export interface Message {
+  id: bigint | number;
+  author: string;
+  content: string;
+  timestamp: bigint | number;
+  blockHeight?: bigint | number;
+}
+
+export function useTokenBalance(walletAddress: string | null) {
+  const [balance, setBalance] = useState<bigint | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!walletAddress) {
+      setBalance(null);
+      setIsLoading(false);
+      return;
+    }
+    let mounted = true;
+    setIsLoading(true);
+    setError(null);
+    contracts.accessToken_getBalance([principalCV(walletAddress)])
+      .then((res: any) => {
+        if (!mounted) return;
+        if (res && typeof res === 'object' && 'value' in res) {
+          setBalance(BigInt(res.value));
+        } else if (typeof res === 'bigint') {
+          setBalance(res);
+        } else if (typeof res === 'number') {
+          setBalance(BigInt(res));
+        } else {
+          setBalance(BigInt(0));
+        }
+      })
+      .catch((err: any) => {
+        if (!mounted) return;
+        setError(err?.message || 'Error fetching balance');
+        setBalance(BigInt(0));
+      })
+      .finally(() => {
+        if (mounted) setIsLoading(false);
+      });
+
+    return () => { mounted = false; };
+  }, [walletAddress]);
+
+  return { balance, isLoading, error };
+}
+
+export function useCanPost(walletAddress: string | null) {
+  const [canPost, setCanPost] = useState<boolean | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!walletAddress) {
+      setCanPost(null);
+      setIsLoading(false);
+      return;
+    }
+    let mounted = true;
+    setIsLoading(true);
+    setError(null);
+    contracts.guestbook_canPost([principalCV(walletAddress)])
+      .then((res: any) => {
+        if (!mounted) return;
+        setCanPost(Boolean(res));
+      })
+      .catch((err: any) => {
+        if (!mounted) return;
+        setError(err?.message || 'Error checking permission');
+        setCanPost(false);
+      })
+      .finally(() => {
+        if (mounted) setIsLoading(false);
+      });
+
+    return () => { mounted = false; };
+  }, [walletAddress]);
+
+  return { canPost, isLoading, error };
+}
+
+export function usePostMessage() {
+  const { call, loading, error, txid } = useGuestbook_PostMessage();
+
+  const postMessage = useCallback(async (msg: string) => {
+    return await call([stringUtf8CV(msg)]);
+  }, [call]);
+
+  return {
+    postMessage,
+    isLoading: loading,
+    error: error ? error.message : null,
+    txId: txid,
+  };
+}
+
+export function useGuestbookMessages(limit: number = 50) {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchMessages = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const countRes: any = await contracts.guestbook_getMessageCount([]);
+      const totalCount = Number(countRes?.value ?? countRes ?? 0);
+      const fetched: Message[] = [];
+      const start = Math.max(1, totalCount - limit + 1);
+
+      for (let i = totalCount; i >= start; i--) {
+        try {
+          const msgRes: any = await contracts.guestbook_getMessage([uintCV(i)]);
+          if (msgRes && typeof msgRes === 'object') {
+            const val = msgRes.value ?? msgRes;
+            if (val) {
+              fetched.push({
+                id: i,
+                author: val.author?.value ?? val.author ?? '',
+                content: val.content?.value ?? val.content ?? '',
+                timestamp: val.timestamp?.value ?? val.timestamp ?? 0,
+                blockHeight: val['block-height']?.value ?? val['block-height'] ?? 0,
+              });
+            }
+          }
+        } catch {}
+      }
+      setMessages(fetched);
+    } catch (err: any) {
+      setError(err?.message || 'Failed to fetch messages');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [limit]);
+
+  useEffect(() => {
+    fetchMessages();
+  }, [fetchMessages]);
+
+  return { messages, isLoading, error, refetch: fetchMessages };
+}
+
 
 

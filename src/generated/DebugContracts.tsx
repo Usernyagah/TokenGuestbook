@@ -4,7 +4,7 @@
 
 import { useState } from 'react';
 import { Cl } from '@stacks/transactions';
-import Message from '@/components/Message';
+
 
 
 
@@ -642,8 +642,6 @@ export default function DebugContracts() {
           </div>
         )}
       </div>
-      
-      <Message />
     </div>
   );
 }

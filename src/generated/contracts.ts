@@ -2,7 +2,7 @@
 // Re-run `stacksdapp generate` to update.
 
 import { request } from '@stacks/connect';
-import { fetchCallReadOnlyFunction, cvToValue, ClarityValue } from '@stacks/transactions';
+import { callReadOnlyFunction, cvToValue, ClarityValue } from '@stacks/transactions';
 import { getReadOnlyNetwork, scaffoldConfig } from '../scaffold.config';
 import { callDevnetContract, getDevnetSenderAddress } from '../lib/devnet';
 
@@ -10,7 +10,7 @@ let _deployments: Record<string, any> = { contracts: {} };
 try { _deployments = require('./deployments.json'); } catch {}
 
 function getContractId(name: string): { address: string; contractName: string } {
-  const contractId: string = _deployments?.contracts?.[name]?.contract_id ?? '';
+  const contractId: string = _deployments?.contracts?.[name]?.contract_id ?? _deployments?.contracts?.[name] ?? '';
   if (!contractId) {
     console.warn(`[scaffold-stacks] "${name}" not deployed. Run stacksdapp deploy.`);
     return { address: '', contractName: name };
@@ -21,8 +21,6 @@ function getContractId(name: string): { address: string; contractName: string } 
 
 
 // ── guestbook ──────────────────────
-
-
 
 export async function guestbook_postMessage(
   functionArgs: ClarityValue[] = [],
@@ -38,20 +36,15 @@ export async function guestbook_postMessage(
       postConditions,
     });
   }
-  // v8: request() accepts ClarityValue[] directly — no serialization needed
   return request('stx_callContract', {
     contract: `${address}.${contractName}`,
     functionName: 'post-message',
-    functionArgs,
+    functionArgs: functionArgs as any,
     postConditions,
     postConditionMode : 'allow',
     network: scaffoldConfig.targetNetwork,
-  });
+  } as any);
 }
-
-
-
-
 
 export async function guestbook_canPost(
   functionArgs: ClarityValue[] = [],
@@ -59,7 +52,7 @@ export async function guestbook_canPost(
 ): Promise<unknown> {
   const { address, contractName } = getContractId('guestbook');
   if (!address) return null;
-  const result = await fetchCallReadOnlyFunction({
+  const result = await callReadOnlyFunction({
     contractAddress: address,
     contractName,
     functionName: 'can-post',
@@ -70,16 +63,13 @@ export async function guestbook_canPost(
   return cvToValue(result);
 }
 
-
-
-
 export async function guestbook_getMessage(
   functionArgs: ClarityValue[] = [],
   senderAddress?: string
 ): Promise<unknown> {
   const { address, contractName } = getContractId('guestbook');
   if (!address) return null;
-  const result = await fetchCallReadOnlyFunction({
+  const result = await callReadOnlyFunction({
     contractAddress: address,
     contractName,
     functionName: 'get-message',
@@ -90,16 +80,13 @@ export async function guestbook_getMessage(
   return cvToValue(result);
 }
 
-
-
-
 export async function guestbook_getMessageCount(
   functionArgs: ClarityValue[] = [],
   senderAddress?: string
 ): Promise<unknown> {
   const { address, contractName } = getContractId('guestbook');
   if (!address) return null;
-  const result = await fetchCallReadOnlyFunction({
+  const result = await callReadOnlyFunction({
     contractAddress: address,
     contractName,
     functionName: 'get-message-count',
@@ -111,10 +98,7 @@ export async function guestbook_getMessageCount(
 }
 
 
-
 // ── access-token ──────────────────────
-
-
 
 export async function accessToken_burn(
   functionArgs: ClarityValue[] = [],
@@ -130,19 +114,15 @@ export async function accessToken_burn(
       postConditions,
     });
   }
-  // v8: request() accepts ClarityValue[] directly — no serialization needed
   return request('stx_callContract', {
     contract: `${address}.${contractName}`,
     functionName: 'burn',
-    functionArgs,
+    functionArgs: functionArgs as any,
     postConditions,
     postConditionMode : 'allow',
     network: scaffoldConfig.targetNetwork,
-  });
+  } as any);
 }
-
-
-
 
 export async function accessToken_mint(
   functionArgs: ClarityValue[] = [],
@@ -158,19 +138,15 @@ export async function accessToken_mint(
       postConditions,
     });
   }
-  // v8: request() accepts ClarityValue[] directly — no serialization needed
   return request('stx_callContract', {
     contract: `${address}.${contractName}`,
     functionName: 'mint',
-    functionArgs,
+    functionArgs: functionArgs as any,
     postConditions,
     postConditionMode : 'allow',
     network: scaffoldConfig.targetNetwork,
-  });
+  } as any);
 }
-
-
-
 
 export async function accessToken_transfer(
   functionArgs: ClarityValue[] = [],
@@ -186,20 +162,15 @@ export async function accessToken_transfer(
       postConditions,
     });
   }
-  // v8: request() accepts ClarityValue[] directly — no serialization needed
   return request('stx_callContract', {
     contract: `${address}.${contractName}`,
     functionName: 'transfer',
-    functionArgs,
+    functionArgs: functionArgs as any,
     postConditions,
     postConditionMode : 'allow',
     network: scaffoldConfig.targetNetwork,
-  });
+  } as any);
 }
-
-
-
-
 
 export async function accessToken_getBalance(
   functionArgs: ClarityValue[] = [],
@@ -207,7 +178,7 @@ export async function accessToken_getBalance(
 ): Promise<unknown> {
   const { address, contractName } = getContractId('access-token');
   if (!address) return null;
-  const result = await fetchCallReadOnlyFunction({
+  const result = await callReadOnlyFunction({
     contractAddress: address,
     contractName,
     functionName: 'get-balance',
@@ -218,16 +189,13 @@ export async function accessToken_getBalance(
   return cvToValue(result);
 }
 
-
-
-
 export async function accessToken_getDecimals(
   functionArgs: ClarityValue[] = [],
   senderAddress?: string
 ): Promise<unknown> {
   const { address, contractName } = getContractId('access-token');
   if (!address) return null;
-  const result = await fetchCallReadOnlyFunction({
+  const result = await callReadOnlyFunction({
     contractAddress: address,
     contractName,
     functionName: 'get-decimals',
@@ -238,16 +206,13 @@ export async function accessToken_getDecimals(
   return cvToValue(result);
 }
 
-
-
-
 export async function accessToken_getName(
   functionArgs: ClarityValue[] = [],
   senderAddress?: string
 ): Promise<unknown> {
   const { address, contractName } = getContractId('access-token');
   if (!address) return null;
-  const result = await fetchCallReadOnlyFunction({
+  const result = await callReadOnlyFunction({
     contractAddress: address,
     contractName,
     functionName: 'get-name',
@@ -258,16 +223,13 @@ export async function accessToken_getName(
   return cvToValue(result);
 }
 
-
-
-
 export async function accessToken_getSymbol(
   functionArgs: ClarityValue[] = [],
   senderAddress?: string
 ): Promise<unknown> {
   const { address, contractName } = getContractId('access-token');
   if (!address) return null;
-  const result = await fetchCallReadOnlyFunction({
+  const result = await callReadOnlyFunction({
     contractAddress: address,
     contractName,
     functionName: 'get-symbol',
@@ -278,16 +240,13 @@ export async function accessToken_getSymbol(
   return cvToValue(result);
 }
 
-
-
-
 export async function accessToken_getTotalSupply(
   functionArgs: ClarityValue[] = [],
   senderAddress?: string
 ): Promise<unknown> {
   const { address, contractName } = getContractId('access-token');
   if (!address) return null;
-  const result = await fetchCallReadOnlyFunction({
+  const result = await callReadOnlyFunction({
     contractAddress: address,
     contractName,
     functionName: 'get-total-supply',
@@ -297,6 +256,3 @@ export async function accessToken_getTotalSupply(
   });
   return cvToValue(result);
 }
-
-
-
