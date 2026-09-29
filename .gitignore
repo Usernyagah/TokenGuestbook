@@ -31,3 +31,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# settings secrets
+*Testnet.toml
+*Mainnet.toml
+

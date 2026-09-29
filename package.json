@@ -9,15 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@stacks/connect": "^7.4.0",
-    "@stacks/network": "^6.4.0",
-    "@stacks/transactions": "^6.4.0",
+    "@stacks/connect": "^8.2.7",
+    "@stacks/keychain": "^4.3.8",
+    "@stacks/network": "^6.17.0",
+    "@stacks/transactions": "^6.17.0",
     "@stacks/wallet-sdk": "^6.4.0",
     "next": "^16.3.6",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"
   },
   "devDependencies": {
+    "@stacks/clarinet-sdk": "^3.24.1",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
